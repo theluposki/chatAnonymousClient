@@ -1,12 +1,12 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import NotFound from "../views/notFound.vue";
-import Home from "../views/home.vue";
-import About from "../views/about.vue";
+import Conversations from "../views/conversations.vue";
+import Contacts from "../views/contacts.vue";
 
 const routes = [
   { path: "/:pathMatch(.*)*", component: NotFound },
-  { path: "/", component: Home },
-  { path: "/about", component: About },
+  { path: "/", component: Conversations },
+  { path: "/contacts", component: Contacts },
 ];
 
 export const router = createRouter({
