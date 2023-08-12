@@ -1,0 +1,124 @@
+@import url("https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background-color ease 0.4s, border-color ease 0.4s,
+    box-shadow ease 0.4s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+:root {
+  --white: #fff;
+  --white2: #f9f9f9;
+
+  --blue: #535bf2;
+  --blue2: #75e7fb;
+
+  --orange: #fb8700;
+
+  --yellow: #fbaa13;
+
+  --roxo: #7d2eaf;
+
+  --green: #94ff00;
+
+  --pink: #ff2770;
+
+  --dark: #1a1a1a;
+  --dark2: #242424;
+
+  --current-primary: var(--blue);
+  --current-secondary: var(--blue2);
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: var(--white2);
+  background-color: var(--dark);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.pink {
+  background-color: var(--pink);
+}
+
+.blue {
+  background-color: var(--blue);
+}
+
+.orange {
+  background-color: var(--orange);
+}
+
+.yellow {
+  background-color: var(--yellow);
+}
+
+.roxo {
+  background-color: var(--roxo);
+}
+
+.green {
+  background-color: var(--green);
+}
+
+body {
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  margin: 0 auto;
+  background-color: transparent;
+}
+
+.btn {
+  background-color: var(--dark);
+  width: 50px;
+  min-width: 50px;
+  height: 50px;
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 26px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: solid 2px transparent;
+  color: var(--current-primary);
+}
+
+.btn i {
+  filter: drop-shadow(2px -1px 0px var(--dark2));
+}
+
+.btn:hover {
+  transition: all ease 0.4s;
+  box-shadow: inset 0 0 3px var(--current-primary);
+}
+
+.btn:active {
+  scale: 0.96;
+}
