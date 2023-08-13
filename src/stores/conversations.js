@@ -11,8 +11,9 @@ export const useConversationsStore = defineStore("conversations", () => {
 
   const myUser = ref({});
 
-  socket.on("newMessage", (data) => {
+  socket.on("newMessage", async (data) => {
     console.log(data)
+    await pushConversationReceiver(data)
   })
 
   onMounted(() => {
@@ -37,6 +38,24 @@ export const useConversationsStore = defineStore("conversations", () => {
   const setCurrentConversation = async (friendId) => {
     keyConversation.value = `${myUser.value.id}-${friendId}`;
     await getConversations()
+  };
+
+  const pushConversationReceiver = async (body) => {
+    try {
+      await db.conversations.add({
+        keyConversation: `${body.receiver}-${body.sender}`,
+        senderNickname: body.senderNickname,
+        sender: body.sender,
+        receiverNickname: body.receiverNickname,
+        receiver: body.receiver,
+        message: body.message,
+        createdAt: new Date(),
+      });
+      
+      getConversations()
+    } catch (error) {
+      console.log(`Error: ${error}`);
+    }
   };
 
   const pushConversation = async (body) => {
