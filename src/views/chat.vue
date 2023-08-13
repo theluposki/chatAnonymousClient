@@ -13,8 +13,7 @@ const friend = ref("");
 
 socket.on("newMessage", async (data) => {
   setTimeout(() => scrollToBottom(), 100);
-})
-
+});
 
 const { params } = useRoute();
 const { go } = useRouter();
@@ -29,7 +28,10 @@ onMounted(() => {
   conversationsStore.setCurrentConversation(
     convertBase64ToObject(params.item).id
   );
-  setTimeout(() => scrollToBottom(), 100);
+  setTimeout(() => {
+    const messageContainer = document.getElementById("listMessages");
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+  }, 100);
 });
 
 const convertBase64ToObject = (base64String) => {
@@ -177,6 +179,7 @@ const sendMessage = async () => {
   gap: 6px;
 
   padding: 8px 10px 26px 10px;
+  scroll-behavior: smooth;
 }
 
 .messageItem {
@@ -199,8 +202,13 @@ const sendMessage = async () => {
 }
 
 .receiverItem {
-  background-color: pink;
+  background-color: var(--dark);
+  border: solid 1px var(--dark2);
+  box-shadow: inset 0 0 3px var(--current-primary);
   align-self: flex-start;
+
+  border-radius: 0 6px 6px 4px;
+  padding: 0 14px;
 }
 .sender {
   color: var(--current-primary);
