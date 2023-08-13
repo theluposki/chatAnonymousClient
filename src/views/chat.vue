@@ -162,15 +162,14 @@ const sendMessage = async () => {
 }
 
 .main {
-  min-height: calc(100vh - 121px);
-  max-height: calc(100vh - 121px);
+  min-height: calc(100vh - 120px);
+  max-height: calc(100vh - 120px);
   min-width: 100%;
-  background-color: red;
 }
 
 .listMessages {
-  min-height: calc(100vh - 121px);
-  max-height: calc(100vh - 121px);
+  min-height: calc(100vh - 120px);
+  max-height: calc(100vh - 120px);
 
   overflow-x: auto;
   overflow-y: auto;
