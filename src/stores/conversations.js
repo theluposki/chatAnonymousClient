@@ -11,6 +11,10 @@ export const useConversationsStore = defineStore("conversations", () => {
 
   const myUser = ref({});
 
+  socket.on("newMessage", (data) => {
+    console.log(data)
+  })
+
   onMounted(() => {
     if (localStorage.getItem("USER")) {
       myUser.value = JSON.parse(decryptValue(localStorage.getItem("USER")));
@@ -25,7 +29,6 @@ export const useConversationsStore = defineStore("conversations", () => {
         .toArray();
 
       currentConversation.value = conversation;
-      console.log(conversation[0])
     } catch (error) {
       console.log(`Error: ${error}`);
     }
