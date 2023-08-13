@@ -162,7 +162,8 @@ const sendMessage = async () => {
 }
 
 .main {
-  min-height: calc(100vh - 120px);
+  /* min-height: calc(100vh - 120px); */
+  flex: 1;
   max-height: calc(100vh - 120px);
   min-width: 100%;
 }
