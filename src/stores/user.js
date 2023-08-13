@@ -5,7 +5,7 @@ import { api } from "../axios.js";
 import { decryptValue, encryptValue } from "../utils/crypto.js";
 
 export const useUserStore = defineStore("user", () => {
-  const user = ref({ name: "luposki" });
+  const user = ref({});
 
   const setUser = (userData) => {
     user.value = userData;
@@ -15,6 +15,10 @@ export const useUserStore = defineStore("user", () => {
   onMounted(() => {
     if (localStorage.getItem("USER")) {
       user.value = JSON.parse(decryptValue(localStorage.getItem("USER")));
+
+      setTimeout(() => {
+        socket.emit("user_connected", user.value)
+      }, 100)
     }
   });
 
