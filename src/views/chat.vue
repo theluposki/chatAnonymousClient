@@ -159,8 +159,8 @@ const sendMessage = async () => {
 }
 
 .main {
-  position: fixed;
-  top: 60px;
+  position: absolute;
+  top: 0;
   left: 0;
   min-height: calc(100vh - 121px);
   max-height: calc(100vh - 121px);
