@@ -4,11 +4,17 @@ import { useUserStore } from "../stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { useConversationsStore } from "../stores/conversations.js";
 import { differenceInMinutes } from "date-fns";
+import { socket } from "../socket.io";
 
 const userStore = useUserStore();
 const conversationsStore = useConversationsStore();
 const message = ref("");
 const friend = ref("");
+
+socket.on("newMessage", async (data) => {
+  setTimeout(() => scrollToBottom(), 100);
+})
+
 
 const { params } = useRoute();
 const { go } = useRouter();
