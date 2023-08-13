@@ -29,11 +29,7 @@ const activeNav = computed(() => layoutStore.activeNav)
 </template>
 
 <style scoped>
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  
+.header {  
   display: flex;
   justify-content: space-between;
   align-items: center;

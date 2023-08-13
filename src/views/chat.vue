@@ -94,7 +94,7 @@ const sendMessage = async () => {
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <header class="header">
       <button class="btn" @click="goBack">
         <i class="bx bx-arrow-back"></i>
@@ -142,11 +142,14 @@ const sendMessage = async () => {
 </template>
 
 <style scoped>
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
 
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -159,12 +162,10 @@ const sendMessage = async () => {
 }
 
 .main {
-  position: absolute;
-  top: 0;
-  left: 0;
   min-height: calc(100vh - 121px);
   max-height: calc(100vh - 121px);
   min-width: 100%;
+  background-color: red;
 }
 
 .listMessages {
@@ -234,10 +235,6 @@ const sendMessage = async () => {
 }
 
 .footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -20,10 +20,6 @@
   --animate-duration: 0.5s;
 }
 .main {
-  position: fixed;
-  top: 60px;
-  left: 0;
-
   background-color: transparent;
   min-height: calc(100vh - 50px);
   min-width: 100%;
