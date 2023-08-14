@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onBeforeUpdate } from "vue";
 import { useUserStore } from "../stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { useConversationsStore } from "../stores/conversations.js";
@@ -11,8 +11,14 @@ const conversationsStore = useConversationsStore();
 const message = ref("");
 const friend = ref("");
 
-socket.on("newMessage", async (data) => {
+const friendIsTyping = ref("");
+
+socket.on("newMessage", async () => {
   setTimeout(() => scrollToBottom(), 100);
+});
+
+socket.on("friend_is_typing", async (data) => {
+  friendIsTyping.value = data.message;
 });
 
 const { params } = useRoute();
@@ -29,6 +35,11 @@ onMounted(() => {
     convertBase64ToObject(params.item).id
   );
   setTimeout(() => {
+    socket.emit("check_for_new_messages", {
+      userId: user.value.id,
+      friendId: friend.value.id,
+    });
+
     const messageContainer = document.getElementById("listMessages");
     messageContainer.scrollTop = messageContainer.scrollHeight;
   }, 100);
@@ -91,6 +102,19 @@ const sendMessage = async () => {
   message.value = "";
   setTimeout(() => scrollToBottom(), 100);
 };
+
+const isTyping = () => {
+  socket.emit("is_typing", {
+    friendId: friend.value.id,
+    nickname: user.value.nickname,
+  });
+};
+
+const stoppedTyping = () => {
+  socket.emit("stopped_typing", {
+    friendId: friend.value.id,
+  });
+};
 </script>
 
 <template>
@@ -107,6 +131,7 @@ const sendMessage = async () => {
     </header>
 
     <main class="main">
+      <div class="friendIsTyping">{{ friendIsTyping }}</div>
       <ul class="listMessages" id="listMessages">
         <li
           :class="
@@ -132,6 +157,8 @@ const sendMessage = async () => {
         id="message"
         autocomplete="off"
         placeholder="message"
+        @focus="isTyping"
+        @focusout="stoppedTyping"
         @keydown.enter="sendMessage"
       />
       <button class="btn" @click="sendMessage">
@@ -142,7 +169,6 @@ const sendMessage = async () => {
 </template>
 
 <style scoped>
-
 .container {
   display: flex;
   flex-direction: column;
@@ -181,6 +207,16 @@ const sendMessage = async () => {
 
   padding: 8px 10px 26px 10px;
   scroll-behavior: smooth;
+}
+
+.friendIsTyping {
+  position: absolute;
+  bottom: 64px;
+  left: 50%;
+  transform: translate(-50%);
+
+  font-size: 12px;
+  color: var(--dark6);
 }
 
 .messageItem {

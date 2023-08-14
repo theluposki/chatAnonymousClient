@@ -33,6 +33,11 @@
 
   --dark: #1a1a1a;
   --dark2: #242424;
+  --dark3: #2d2d2d;
+  --dark4: #353535;
+  --dark5: #3e3e3e;
+  --dark6: #4f4f4f;
+
 
   --current-primary: var(--blue);
   --current-secondary: var(--blue2);

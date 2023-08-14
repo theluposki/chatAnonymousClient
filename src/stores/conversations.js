@@ -12,9 +12,18 @@ export const useConversationsStore = defineStore("conversations", () => {
   const myUser = ref({});
 
   socket.on("newMessage", async (data) => {
-    console.log(data)
     await pushConversationReceiver(data)
+    socket.emit("message_done", data.serverID)
   })
+
+  socket.on("have_new_messages", (data) => {
+    console.log(data);
+
+    data.forEach(async item => {
+      await pushConversationReceiver(item)
+      socket.emit("message_done", item.id)
+    });
+  });
 
   onMounted(() => {
     if (localStorage.getItem("USER")) {
@@ -49,6 +58,7 @@ export const useConversationsStore = defineStore("conversations", () => {
         receiverNickname: body.receiverNickname,
         receiver: body.receiver,
         message: body.message,
+        status: "done",
         createdAt: new Date(),
       });
       
@@ -67,6 +77,7 @@ export const useConversationsStore = defineStore("conversations", () => {
         receiverNickname: body.receiverNickname,
         receiver: body.receiver,
         message: body.message,
+        status: "pending",
         createdAt: new Date(),
       });
       
@@ -76,6 +87,7 @@ export const useConversationsStore = defineStore("conversations", () => {
         receiverNickname: body.receiverNickname,
         receiver: body.receiver,
         message: body.message,
+        status: "pending"
       })
 
       getConversations()
