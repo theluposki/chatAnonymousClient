@@ -207,6 +207,10 @@ const stoppedTyping = () => {
 
   padding: 8px 10px 26px 10px;
   scroll-behavior: smooth;
+
+  background-image: url("src/assets/bg.svg");
+  background-position: center;
+  background-size: cover;
 }
 
 .friendIsTyping {
@@ -231,43 +235,92 @@ const stoppedTyping = () => {
 }
 
 .senderItem {
-  background-color: var(--dark2);
+  position: relative;
+  background-color: var(--dark3);
   align-self: flex-end;
 
   border-radius: 6px 0 4px 6px;
   padding: 0 14px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.senderItem::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -10px;
+
+  width: 0; 
+  height: 0; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid var(--dark3);
 }
 
 .receiverItem {
-  background-color: var(--dark);
-  border: solid 1px var(--dark2);
-  box-shadow: inset 0 0 3px var(--current-primary);
+  position: relative;
+  background-color: var(--dark2);
   align-self: flex-start;
 
   border-radius: 0 6px 6px 4px;
   padding: 0 14px;
+
+  display: flex;
+  flex-direction: column;
 }
-.sender {
-  color: var(--current-primary);
+
+.receiverItem::after {
+  content: '';
   position: absolute;
-  top: 4px;
-  left: 14px;
-  font-size: 12px;
+  top: 0;
+  left: -10px;
+
+  width: 0; 
+  height: 0; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid var(--dark2);
+}
+
+.senderItem .sender {
+  color: var(--current-primary);
+  font-weight: 600;
+  position: absolute;
+  top: 1px;
+  right: 8px;
+  text-align: right;
+  font-size: 10px;
+}
+
+.receiverItem .sender {
+  color: var(--current-secondary);
+  font-weight: 600;
+  position: absolute;
+  top: 1px;
+  left: 8px;
+  text-align: left;
+  font-size: 10px;
 }
 
 .message {
   word-wrap: break-word;
-  margin-top: 28px;
-  margin-bottom: 16px;
+  margin: 18px 0;
   color: var(--white);
 }
 
 .createdAt {
-  font-size: 10px;
+  font-size: 8px;
   position: absolute;
   bottom: 4px;
-  right: 4px;
+  left: 8px;
   color: #ddd;
+}
+
+.senderItem .createdAt {
+  text-align: right;
+  right: 8px;
 }
 
 .footer {

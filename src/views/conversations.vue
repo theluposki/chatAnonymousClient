@@ -82,7 +82,8 @@ const convertObjectToBase64 = (value) => {
 
   display: flex;
   flex-flow: column;
-  gap: 4px;
+  gap: 1px;
+  cursor: pointer;
 }
 
 .end-list {
@@ -109,16 +110,16 @@ const convertObjectToBase64 = (value) => {
 }
 
 .wrapper-image {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 8px;
   object-fit: cover;
   margin-left: 4px;
 }
 
 .image {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 8px;
   object-fit: cover;
 }
