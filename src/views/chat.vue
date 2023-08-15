@@ -208,9 +208,7 @@ const stoppedTyping = () => {
   padding: 8px 10px 26px 10px;
   scroll-behavior: smooth;
 
-  background-image: url("src/assets/bg.svg");
-  background-position: center;
-  background-size: cover;
+  background-color: transparent;
 }
 
 .friendIsTyping {

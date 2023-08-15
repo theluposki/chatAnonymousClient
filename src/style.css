@@ -110,12 +110,14 @@ body {
 #app {
   position: relative;
   width: 100%;
-  max-width: 1280px;
+  max-width: 600px;
   min-height: 100vh;
   max-height: 100vh;
   overflow: hidden;
   margin: 0 auto;
-  background-color: transparent;
+  background-image: url('src/assets/bg.svg');
+  background-position: center;
+  background-size: cover;
 }
 
 .btn {
@@ -147,4 +149,26 @@ body {
 
 .btn:active {
   scale: 0.96;
+}
+
+@media (max-width: 600px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--dark);
+    border-radius: 4px;
+  
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--current-primary);
+    border-radius: 4px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--current-secondary);
+  }
 }

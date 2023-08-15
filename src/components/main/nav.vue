@@ -34,11 +34,11 @@ const setLink = (link) => {
 <style scoped>
 .nav {
   position: absolute;
-  top: 60px;
+  top: 56px;
   left: 0;
 
   width: 100%;
-  min-height: 60px;
+  min-height: 64px;
   z-index: 3;
 
   border-radius: 0 0 20px 20px;

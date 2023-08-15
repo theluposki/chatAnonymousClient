@@ -30,6 +30,8 @@ const activeNav = computed(() => layoutStore.activeNav)
 
 <style scoped>
 .header {  
+  position: relative;
+  z-index: 4;
   display: flex;
   justify-content: space-between;
   align-items: center;

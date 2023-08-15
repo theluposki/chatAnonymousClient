@@ -90,80 +90,85 @@ const logup = async () => {
       </div>
     </header>
 
-    <div class="main" v-if="activeMainLogin">
-      <input
-        type="text"
-        class="input"
-        v-model="nickname"
-        placeholder="digite o seu nome do usuário"
-      />
-      <div class="pass">
+      <div class="main" v-if="activeMainLogin">
         <input
-          type="password"
+          type="text"
           class="input"
-          v-model="password"
-          id="password"
-          placeholder="digite sua senha"
+          v-model="nickname"
+          placeholder="digite o seu nome do usuário"
         />
-        <button class="btn" @click="fnLock">
-          <i class="bx bx-lock-alt" v-if="lock"></i>
-          <i class="bx bx-lock-open-alt" v-else></i>
-        </button>
+        <div class="pass">
+          <input
+            type="password"
+            class="input"
+            v-model="password"
+            id="password"
+            placeholder="digite sua senha"
+          />
+          <button class="btn" @click="fnLock">
+            <i class="bx bx-lock-alt" v-if="lock"></i>
+            <i class="bx bx-lock-open-alt" v-else></i>
+          </button>
+        </div>
+
+        <label for="remember" class="remember">
+          <i class="bx bx-checkbox" v-if="!remember"></i>
+          <i class="bx bx-checkbox-checked" v-if="remember"></i>
+          Me manter conectado:
+          <span class="rememberBool">
+            {{ remember ? "Sim" : "Não" }}
+          </span>
+          <input type="checkbox" id="remember" v-model="remember" hidden />
+        </label>
+
+        <p class="message">{{ message }}</p>
+
+        <button class="btn btn-full" @click="login">Acessar</button>
       </div>
 
-      <label for="remember" class="remember">
-        <i class="bx bx-checkbox" v-if="!remember"></i>
-        <i class="bx bx-checkbox-checked" v-if="remember"></i>
-        Me manter conectado:
-        <span class="rememberBool">
-          {{ remember ? "Sim" : "Não" }}
-        </span>
-        <input type="checkbox" id="remember" v-model="remember" hidden />
-      </label>
-
-      <p class="message">{{ message }}</p>
-
-      <button class="btn btn-full" @click="login">Acessar</button>
-    </div>
-
-    <div class="main" v-if="activeMainLogup">
-      <input
-        type="text"
-        class="input"
-        v-model="nickname"
-        placeholder="digite um nome do usuário"
-      />
-      <div class="pass">
+      <div class="main" v-if="activeMainLogup">
         <input
-          type="password"
+          type="text"
           class="input"
-          v-model="password"
-          id="password"
-          placeholder="digite uma senha"
+          v-model="nickname"
+          placeholder="digite um nome do usuário"
         />
-        <button class="btn" @click="fnLock">
-          <i class="bx bx-lock-alt" v-if="lock"></i>
-          <i class="bx bx-lock-open-alt" v-else></i>
-        </button>
+        <div class="pass">
+          <input
+            type="password"
+            class="input"
+            v-model="password"
+            id="password"
+            placeholder="digite uma senha"
+          />
+          <button class="btn" @click="fnLock">
+            <i class="bx bx-lock-alt" v-if="lock"></i>
+            <i class="bx bx-lock-open-alt" v-else></i>
+          </button>
+        </div>
+
+        <p class="message">{{ message }}</p>
+
+        <button class="btn btn-full" @click="logup">Criar</button>
       </div>
-
-      <p class="message">{{ message }}</p>
-
-      <button class="btn btn-full" @click="logup">Criar</button>
-    </div>
   </div>
 </template>
 
 <style scoped>
+.animate__animated.animate__fadeIn {
+  --animate-duration: .1s;
+}
+.animate__animated.animate__fadeOut {
+  --animate-duration: .1s;
+}
 .connect {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   min-width: 400px;
-  min-height: calc(100vh - 100px);
+  max-width: 400px;
+  min-height: 100vh;
+  max-height: 100vh;
 
   display: flex;
+  margin: 0 auto;
   flex-direction: column;
 }
 
@@ -173,34 +178,40 @@ const logup = async () => {
   align-items: center;
   min-height: 50px;
   max-height: 50px;
-  background-color: var(--dark2);
+  background-color: #212121;
+  padding: 4px;
+  border-bottom: solid 2px var(--dark);
 }
 
 .btn-header {
   flex: 1;
-  min-height: 50px;
-  max-height: 50px;
+  min-height: 42px;
+  max-height: 42px;
 
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 600;
   cursor: pointer;
+
+  border-radius: 6px;
 }
 
 .active {
   color: var(--current-primary);
   box-shadow: inset 0 0 6px var(--current-primary);
+  background-color: var(--dark);
 }
 
 .main {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  background-color: #000;
+  min-height: calc(100vh - 50px);
+  max-height: calc(100vh - 50px);
+  background-color: rgba(33, 33, 33, 0.7);
   padding: 0 24px;
   gap: 20px;
 }

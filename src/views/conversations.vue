@@ -4,7 +4,6 @@ import { listCoversations } from "../mock/listCoversations.js";
 import { useRouter } from "vue-router";
 import HeaderM from "../components/main/header.vue";
 import { useUserStore } from "../stores/user.js";
-
 const userStore = useUserStore();
 
 const user = computed(() => userStore.user);
@@ -29,6 +28,7 @@ const convertObjectToBase64 = (value) => {
 
 <template>
   <div class="conversations">
+
     <HeaderM v-if="user.nickname" />
     <ul class="list">
       <li
@@ -40,7 +40,7 @@ const convertObjectToBase64 = (value) => {
             `/chat/${convertObjectToBase64({
               id: item.id,
               nickname: item.nickname,
-              picture: item.picture
+              picture: item.picture,
             })}`
           )
         "
@@ -71,18 +71,18 @@ const convertObjectToBase64 = (value) => {
 .list {
   position: relative;
   list-style: none;
-  background-color: var(--dark);
+  background-color: transparent;
+
   min-height: calc(100vh - 60px);
   max-height: calc(100vh - 60px);
   overflow-x: hidden;
   overflow-y: auto;
 
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 8px 10px;
 
   display: flex;
   flex-flow: column;
-  gap: 1px;
+  gap: 8px;
   cursor: pointer;
 }
 
@@ -94,13 +94,13 @@ const convertObjectToBase64 = (value) => {
 
 .item {
   min-height: 80px;
-  background-color: var(--dark2);
+  background-color: rgba(33, 33, 33, 0.8);
 
   display: flex;
   align-items: center;
 
   border-radius: 6px;
-  box-shadow: inset 0 0 3px black;
+  box-shadow: inset 0 0 3px black, 0 0 13px black;
   overflow: hidden;
   padding: 4px;
 }
