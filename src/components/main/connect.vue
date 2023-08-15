@@ -77,13 +77,13 @@ const logup = async () => {
   <div class="connect">
     <header class="header">
       <div
-        :class="activeMainLogin ? 'btn-header active' : 'btn-header'"
+        :class="activeMainLogin ? 'btn btn-header active' : 'btn btn-header'"
         @click="fnActiveMainLogin"
       >
         Acessar
       </div>
       <div
-        :class="activeMainLogup ? 'btn-header active' : 'btn-header'"
+        :class="activeMainLogup ? 'btn btn-header active' : 'btn btn-header'"
         @click="fnActiveMainLogup"
       >
         Criar usuário
@@ -185,22 +185,11 @@ const logup = async () => {
 
 .btn-header {
   flex: 1;
-  min-height: 42px;
-  max-height: 42px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 600;
-  cursor: pointer;
-
-  border-radius: 6px;
 }
 
 .active {
-  color: var(--current-primary);
-  box-shadow: inset 0 0 6px var(--current-primary);
-  background-color: var(--dark);
+  background-color: var(--current-primary);
+  color: var(--white);
 }
 
 .main {
