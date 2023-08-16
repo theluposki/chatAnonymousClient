@@ -38,6 +38,8 @@
   --dark5: #3e3e3e;
   --dark6: #4f4f4f;
 
+  --browser-height: 0px;
+
 
   --current-primary: var(--blue);
   --current-secondary: var(--blue2);
@@ -104,15 +106,15 @@
 body {
   display: flex;
   min-width: 320px;
-  min-height: 100vh;
+  height: var(--browser-height);
+  max-height: var(--browser-height);
 }
 
 #app {
   position: relative;
   width: 100%;
   max-width: 600px;
-  min-height: 100vh;
-  max-height: 100vh;
+  max-height: var(--browser-height);
   overflow: hidden;
   margin: 0 auto;
   background-image: url('src/assets/bg.svg');
@@ -122,6 +124,7 @@ body {
 
 .btn {
   background-color: var(--dark);
+  
   width: 50px;
   min-width: 50px;
   height: 50px;

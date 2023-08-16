@@ -5,11 +5,14 @@ import { useRoute, useRouter } from "vue-router";
 import { useConversationsStore } from "../stores/conversations.js";
 import { differenceInMinutes } from "date-fns";
 import { socket } from "../socket.io";
+import { setBrowserHeight } from "../utils/setBrowserHeight.js";
 
 const userStore = useUserStore();
 const conversationsStore = useConversationsStore();
 const message = ref("");
 const friend = ref("");
+
+window.addEventListener("resize", setBrowserHeight);
 
 const friendIsTyping = ref("");
 
@@ -156,12 +159,13 @@ const stoppedTyping = () => {
         class="input"
         id="message"
         autocomplete="off"
+        autosave="off"
         placeholder="message"
         @focus="isTyping"
         @focusout="stoppedTyping"
         @keydown.enter="sendMessage"
       />
-      <button class="btn" @click="sendMessage">
+      <button class="btn btn-send" @click="sendMessage">
         <i class="bx bx-send"></i>
       </button>
     </footer>
@@ -170,12 +174,50 @@ const stoppedTyping = () => {
 
 <style scoped>
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
+  min-height: var(--browser-height);
+  max-height: var(--browser-height);
 }
 .header {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  min-height: 60px;
+  max-height: 60px;
+  background-color: var(--dark2);
+  padding: 0 8px;
+  z-index: 4;
+}
+
+.main {
+  position: absolute;
+  top: 60px;
+  left: 0;
+
+  width: 100%;
+  min-height: calc(var(--browser-height) - 120px);
+  max-height: calc(var(--browser-height) - 120px);
+
+  display: flex;
+
+  background-color: transparent;
+  z-index: 3;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -187,16 +229,10 @@ const stoppedTyping = () => {
   padding: 0 8px;
 }
 
-.main {
-  /* min-height: calc(100vh - 120px); */
-  flex: 1;
-  max-height: calc(100vh - 120px);
-  min-width: 100%;
-}
-
 .listMessages {
-  min-height: calc(100vh - 120px);
-  max-height: calc(100vh - 120px);
+  min-width: 100%;
+  flex-grow: 1;
+  max-height: calc(var(--browser-height) - 120px);
 
   overflow-x: auto;
   overflow-y: auto;
@@ -213,10 +249,9 @@ const stoppedTyping = () => {
 
 .friendIsTyping {
   position: absolute;
-  bottom: 64px;
+  bottom: 0;
   left: 50%;
   transform: translate(-50%);
-
   font-size: 12px;
   color: var(--dark6);
 }
@@ -227,7 +262,7 @@ const stoppedTyping = () => {
   flex-direction: column;
 
   background-color: var(--dark2);
-  max-width: 200px;
+  max-width: 80%;
   min-width: 100px;
   padding: 0 12px;
 }
@@ -245,13 +280,13 @@ const stoppedTyping = () => {
 }
 
 .senderItem::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: -10px;
 
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-top: 10px solid var(--dark3);
@@ -270,13 +305,13 @@ const stoppedTyping = () => {
 }
 
 .receiverItem::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -10px;
 
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-top: 10px solid var(--dark2);
@@ -321,18 +356,6 @@ const stoppedTyping = () => {
   right: 8px;
 }
 
-.footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  width: 100%;
-  min-height: 60px;
-  max-height: 60px;
-  background-color: var(--dark2);
-  padding: 0 8px;
-}
-
 .details {
   display: flex;
   align-items: center;
@@ -355,11 +378,20 @@ const stoppedTyping = () => {
   min-height: 50px;
   max-height: 50px;
 
-  padding: 0 12px;
+  padding: 0 16px;
   font-size: 16px;
   background-color: var(--dark);
-  border: solid 2px var(--dark2);
   color: var(--white);
-  border-radius: 6px;
+  border-radius: 6px 6px 6px 26px;
+  border: solid 2px var(--dark3);
+}
+
+.input:focus {
+  border: solid 2px var(--current-primary);
+}
+
+.btn-send {
+  max-height: 50px;
+  border-radius: 6px 6px 26px 6px;
 }
 </style>

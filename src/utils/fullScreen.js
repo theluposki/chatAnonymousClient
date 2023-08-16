@@ -1,36 +1,45 @@
-export const toggleFullscreen = () =>  {
+import { setBrowserHeight, setBrowserHeightVh } from "./setBrowserHeight.js";
+
+export const toggleFullscreen = () => {
   if (
     document.fullscreenElement ||
     document.mozFullScreenElement ||
     document.webkitFullscreenElement ||
     document.msFullscreenElement
   ) {
-    // O documento está em modo de tela cheia, solicita a saída do modo de tela cheia
+    // Sair do modo de tela cheia
     if (document.exitFullscreen) {
       document.exitFullscreen();
+      setBrowserHeight()
     } else if (document.mozCancelFullScreen) {
-      // Firefox
       document.mozCancelFullScreen();
+      setBrowserHeight()
     } else if (document.webkitExitFullscreen) {
-      // Chrome, Safari e Opera
       document.webkitExitFullscreen();
+      setBrowserHeight()
     } else if (document.msExitFullscreen) {
-      // Internet Explorer/Edge
       document.msExitFullscreen();
+      setBrowserHeight()
     }
   } else {
-    // O documento não está em modo de tela cheia, solicita a entrada no modo de tela cheia
+    // Entrar no modo de tela cheia
     if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
+      document.documentElement.requestFullscreen().then(() => {
+        // Atualizar a altura do navegador após entrar no modo de tela cheia
+        setBrowserHeightVh();
+      });
     } else if (document.documentElement.mozRequestFullScreen) {
-      // Firefox
-      document.documentElement.mozRequestFullScreen();
+      document.documentElement.mozRequestFullScreen().then(() => {
+        setBrowserHeightVh();
+      });
     } else if (document.documentElement.webkitRequestFullscreen) {
-      // Chrome, Safari e Opera
-      document.documentElement.webkitRequestFullscreen();
+      document.documentElement.webkitRequestFullscreen().then(() => {
+        setBrowserHeightVh();
+      });
     } else if (document.documentElement.msRequestFullscreen) {
-      // Internet Explorer/Edge
-      document.documentElement.msRequestFullscreen();
+      document.documentElement.msRequestFullscreen().then(() => {
+        setBrowserHeightVh();
+      });
     }
   }
-}
+};
