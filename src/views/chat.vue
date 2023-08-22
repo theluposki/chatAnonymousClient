@@ -12,7 +12,7 @@ const conversationsStore = useConversationsStore();
 const message = ref("");
 const friend = ref("");
 
-window.addEventListener("resize", setBrowserHeight);
+// window.addEventListener("resize", setBrowserHeight);
 
 const friendIsTyping = ref("");
 
@@ -100,6 +100,7 @@ const sendMessage = async () => {
     receiverNickname: friend.value.nickname,
     receiver: friend.value.id,
     message: message.value,
+    status: "pending",
   });
 
   message.value = "";
@@ -145,7 +146,13 @@ const stoppedTyping = () => {
           v-for="item in currentConversation"
           :key="item.id"
         >
-          <span class="sender">{{ item.senderNickname }}</span>
+          <span class="sender">
+            {{ item.senderNickname }}
+            <span class="status">
+              <i class="bx bx-check-double" v-if="item.status === 'done'"></i>
+              <i class="bx bx-check" v-if="item.status === 'pending'"></i>
+            </span>
+          </span>
           <span class="message">{{ item.message }}</span>
           <span class="createdAt">{{ getTimeAgo(item.createdAt) }}</span>
         </li>
@@ -325,6 +332,10 @@ const stoppedTyping = () => {
   right: 8px;
   text-align: right;
   font-size: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .receiverItem .sender {
@@ -335,6 +346,10 @@ const stoppedTyping = () => {
   left: 8px;
   text-align: left;
   font-size: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .message {
@@ -354,6 +369,10 @@ const stoppedTyping = () => {
 .senderItem .createdAt {
   text-align: right;
   right: 8px;
+}
+
+.status {
+  font-size: 14px;
 }
 
 .details {

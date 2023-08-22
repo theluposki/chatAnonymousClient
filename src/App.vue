@@ -18,7 +18,7 @@ setBrowserHeight();
 </script>
 
 <template>
-  <Connect v-if="!user.nickname" />
+  <Connect v-if="!user?.nickname" />
 
   <transition
     enter-active-class="animate__animated animate__backInDown"

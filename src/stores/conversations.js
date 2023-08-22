@@ -11,17 +11,40 @@ export const useConversationsStore = defineStore("conversations", () => {
 
   const myUser = ref({});
 
+  socket.on("done", async (data) => {
+    const { uuidMessage } = data
+    try {
+      const conversation = await db.conversations
+        .where("uuidMessage")
+        .equals(uuidMessage)
+        .first();
+
+      await db.conversations.update(conversation.id, {
+        status: "done",
+      });
+
+      await getConversations();
+    } catch (error) {
+      console.log(`Error: ${error}`);
+    }
+  });
+
   socket.on("newMessage", async (data) => {
-    await pushConversationReceiver(data)
-    socket.emit("message_done", data.serverID)
-  })
+    await pushConversationReceiver(data);
+
+    socket.emit("message_done", {
+      serverID: data.serverID,
+      uuidMessage: data.uuidMessage,
+    });
+  });
 
   socket.on("have_new_messages", (data) => {
-    console.log(data);
-
-    data.forEach(async item => {
-      await pushConversationReceiver(item)
-      socket.emit("message_done", item.id)
+    data.forEach(async (item) => {
+      await pushConversationReceiver(item);
+      socket.emit("message_done", {
+        serverID: item.id,
+        uuidMessage: item.uuidMessage,
+      });
     });
   });
 
@@ -46,7 +69,7 @@ export const useConversationsStore = defineStore("conversations", () => {
 
   const setCurrentConversation = async (friendId) => {
     keyConversation.value = `${myUser.value.id}-${friendId}`;
-    await getConversations()
+    await getConversations();
   };
 
   const pushConversationReceiver = async (body) => {
@@ -59,16 +82,18 @@ export const useConversationsStore = defineStore("conversations", () => {
         receiver: body.receiver,
         message: body.message,
         status: "done",
+        uuidMessage: body.uuidMessage,
         createdAt: new Date(),
       });
-      
-      getConversations()
+
+      getConversations();
     } catch (error) {
       console.log(`Error: ${error}`);
     }
   };
 
   const pushConversation = async (body) => {
+    let uuidMessage = self.crypto.randomUUID();
     try {
       await db.conversations.add({
         keyConversation: body.keyConversation,
@@ -78,19 +103,21 @@ export const useConversationsStore = defineStore("conversations", () => {
         receiver: body.receiver,
         message: body.message,
         status: "pending",
+        uuidMessage,
         createdAt: new Date(),
       });
-      
+
       socket.emit("send_message", {
         senderNickname: body.senderNickname,
         sender: body.sender,
         receiverNickname: body.receiverNickname,
         receiver: body.receiver,
         message: body.message,
-        status: "pending"
-      })
+        status: "pending",
+        uuidMessage,
+      });
 
-      getConversations()
+      getConversations();
     } catch (error) {
       console.log(`Error: ${error}`);
     }
