@@ -6,15 +6,12 @@ import { useLayoutStore } from "./stores/layout.js";
 import Connect from "./components/main/connect.vue";
 import Main from "./components/main/main.vue";
 import Nav from "./components/main/nav.vue";
-import { setBrowserHeight } from "./utils/setBrowserHeight";
 
 const userStore = useUserStore();
 const layoutStore = useLayoutStore();
 
 const user = computed(() => userStore.user);
 const activeNav = computed(() => layoutStore.activeNav);
-
-setBrowserHeight();
 </script>
 
 <template>

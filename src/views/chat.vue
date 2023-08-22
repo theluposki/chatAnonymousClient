@@ -1,18 +1,17 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUpdate } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useUserStore } from "../stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { useConversationsStore } from "../stores/conversations.js";
 import { differenceInMinutes } from "date-fns";
 import { socket } from "../socket.io";
-import { setBrowserHeight } from "../utils/setBrowserHeight.js";
 
 const userStore = useUserStore();
 const conversationsStore = useConversationsStore();
 const message = ref("");
 const friend = ref("");
 
-// window.addEventListener("resize", setBrowserHeight);
+const activeBtnForceToBottom = ref(false);
 
 const friendIsTyping = ref("");
 
@@ -33,6 +32,7 @@ const currentConversation = computed(
 );
 
 onMounted(() => {
+  const messageContainer = document.getElementById("listMessages");
   friend.value = convertBase64ToObject(params.item);
   conversationsStore.setCurrentConversation(
     convertBase64ToObject(params.item).id
@@ -43,9 +43,18 @@ onMounted(() => {
       friendId: friend.value.id,
     });
 
-    const messageContainer = document.getElementById("listMessages");
     messageContainer.scrollTop = messageContainer.scrollHeight;
   }, 100);
+
+  let scrollTimeout;
+
+  messageContainer.addEventListener("scroll", () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      console.log("Página sendo rolada após um atraso.");
+      scrollToBottom()
+    }, 200);
+  });
 });
 
 const convertBase64ToObject = (base64String) => {
@@ -68,12 +77,19 @@ function scrollToBottom() {
     messageContainer.scrollTop + messageContainer.clientHeight + 100 <
     messageContainer.scrollHeight
   ) {
+    activeBtnForceToBottom.value = true;
     return;
   }
 
   if (messageContainer) {
     messageContainer.scrollTop = messageContainer.scrollHeight;
+    activeBtnForceToBottom.value = false;
   }
+}
+
+function scrollForceToBottom() {
+  const messageContainer = document.getElementById("listMessages");
+  messageContainer.scrollTop = messageContainer.scrollHeight;
 }
 
 const getTimeAgo = (createdAt) => {
@@ -136,6 +152,13 @@ const stoppedTyping = () => {
 
     <main class="main">
       <div class="friendIsTyping">{{ friendIsTyping }}</div>
+      <div
+        class="btnScrollBottom"
+        v-if="activeBtnForceToBottom"
+        @click="scrollForceToBottom"
+      >
+        <i class="bx bx-chevrons-down"></i>
+      </div>
       <ul class="listMessages" id="listMessages">
         <li
           :class="
@@ -146,15 +169,17 @@ const stoppedTyping = () => {
           v-for="item in currentConversation"
           :key="item.id"
         >
-          <span class="sender">
-            {{ item.senderNickname }}
+          <span
+            class="message"
+            :data-nickname="item.senderNickname"
+            :data-createdAt="getTimeAgo(item.createdAt)"
+          >
+            <span class="msg">{{ item.message }}</span>
             <span class="status">
               <i class="bx bx-check-double" v-if="item.status === 'done'"></i>
               <i class="bx bx-check" v-if="item.status === 'pending'"></i>
             </span>
           </span>
-          <span class="message">{{ item.message }}</span>
-          <span class="createdAt">{{ getTimeAgo(item.createdAt) }}</span>
         </li>
       </ul>
     </main>
@@ -184,14 +209,10 @@ const stoppedTyping = () => {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: var(--browser-height);
-  max-height: var(--browser-height);
+  min-height: 100vh;
+  max-height: 100vh;
 }
 .header {
-  position: absolute;
-  top: 0;
-  left: 0;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -205,13 +226,10 @@ const stoppedTyping = () => {
 }
 
 .main {
-  position: absolute;
-  top: 60px;
-  left: 0;
-
+  flex: 1;
   width: 100%;
-  min-height: calc(var(--browser-height) - 120px);
-  max-height: calc(var(--browser-height) - 120px);
+  /* min-height: calc(100vh - 120px); */
+  max-height: calc(100vh - 120px);
 
   display: flex;
 
@@ -220,11 +238,7 @@ const stoppedTyping = () => {
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
   z-index: 4;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -239,14 +253,14 @@ const stoppedTyping = () => {
 .listMessages {
   min-width: 100%;
   flex-grow: 1;
-  max-height: calc(var(--browser-height) - 120px);
+  max-height: calc(100vh - 120px);
 
   overflow-x: auto;
   overflow-y: auto;
 
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 12px;
 
   padding: 8px 10px 26px 10px;
   scroll-behavior: smooth;
@@ -256,11 +270,42 @@ const stoppedTyping = () => {
 
 .friendIsTyping {
   position: absolute;
-  bottom: 0;
+  bottom: 66px;
   left: 50%;
   transform: translate(-50%);
+
   font-size: 12px;
-  color: var(--dark6);
+  color: var(--current-primary);
+  background-color: var(--dark);
+  padding: 2px 10px;
+  border-radius: 25px;
+  z-index: 4;
+}
+
+.btnScrollBottom {
+  position: absolute;
+  bottom: 76px;
+  right: 35px;
+  z-index: 4;
+
+  width: 40px;
+  height: 40px;
+
+  font-size: 33px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: var(--current-primary);
+  background-color: var(--dark);
+  box-shadow: 0 0 6px var(--dark2);
+}
+
+.btnScrollBottom:active {
+  scale: 0.95;
 }
 
 .messageItem {
@@ -269,9 +314,11 @@ const stoppedTyping = () => {
   flex-direction: column;
 
   background-color: var(--dark2);
-  max-width: 80%;
-  min-width: 100px;
+  max-width: 85%;
+  width: fit-content;
+  min-width: 70px;
   padding: 0 12px;
+  margin: 14px 0;
 }
 
 .senderItem {
@@ -324,55 +371,43 @@ const stoppedTyping = () => {
   border-top: 10px solid var(--dark2);
 }
 
-.senderItem .sender {
-  color: var(--current-primary);
-  font-weight: 600;
-  position: absolute;
-  top: 1px;
-  right: 8px;
-  text-align: right;
-  font-size: 10px;
-
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.receiverItem .sender {
-  color: var(--current-secondary);
-  font-weight: 600;
-  position: absolute;
-  top: 1px;
-  left: 8px;
-  text-align: left;
-  font-size: 10px;
-
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
 .message {
   word-wrap: break-word;
-  margin: 18px 0;
+  margin: 4px 0;
   color: var(--white);
+  padding-bottom: 14px;
 }
 
-.createdAt {
-  font-size: 8px;
+.message::before {
+  content: attr(data-nickname);
   position: absolute;
-  bottom: 4px;
-  left: 8px;
-  color: #ddd;
+  top: -16px;
+  left: 0;
+
+  background-color: var(--dark);
+  padding: 1px 4px;
+  border-radius: 25px;
+  font-size: 8px;
 }
 
-.senderItem .createdAt {
-  text-align: right;
-  right: 8px;
+.message::after {
+  content: attr(data-createdAt);
+  position: absolute;
+  bottom: -16px;
+  left: 0;
+
+  background-color: var(--dark);
+  padding: 1px 4px;
+  border-radius: 25px;
+  font-size: 8px;
 }
 
 .status {
-  font-size: 14px;
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  font-size: 18px;
+  color: var(--dark6);
 }
 
 .details {

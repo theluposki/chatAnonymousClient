@@ -106,20 +106,22 @@
 body {
   display: flex;
   min-width: 320px;
-  height: var(--browser-height);
-  max-height: var(--browser-height);
+  height: 100vh;
+  max-height: 100vh;
+  background-image: url('src/assets/bg.svg');
+  background-position: center bottom;
+  background-size: cover;
 }
 
 #app {
   position: relative;
   width: 100%;
   max-width: 600px;
-  max-height: var(--browser-height);
+  max-height: 100vh;
   overflow: hidden;
   margin: 0 auto;
-  background-image: url('src/assets/bg.svg');
-  background-position: center;
-  background-size: cover;
+  background: transparent;
+  box-shadow: 0 0 33px #000;
 }
 
 .btn {
